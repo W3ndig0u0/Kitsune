@@ -1,23 +1,28 @@
 package com.example.kitsuneApi.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
-@Data
 @Entity
-@Table(name = "anime_progress")
-public class AnimeProgress {
+@Data
+public class UserProgress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;
-    private String animeId;
-    private String title;
-    private Integer lastEpisode;
-    private String status;
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private MediaItem media;
+
+    private String lastEpisodeId;
+    private Integer lastTimeInSeconds;
+    private LocalDateTime lastWatched;
 }

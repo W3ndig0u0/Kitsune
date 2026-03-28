@@ -1,7 +1,6 @@
 package com.example.kitsuneApi.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("${properties.api.anime}")
-@CrossOrigin("${frontend.api.url}")
 public class AnimeController {
 
     private final ConsumetService consumetService;
@@ -43,4 +41,5 @@ public class AnimeController {
                 .defaultIfEmpty(ResponseEntity.notFound().build())
                 .onErrorReturn(ResponseEntity.status(500).build());
     }
+
 }

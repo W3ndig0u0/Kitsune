@@ -1,10 +1,16 @@
 package com.example.kitsuneApi.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -24,6 +30,37 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+    private String bio;
+
+    private String profilePicture;
+    private Integer points = 0;
+
+    @Column(nullable = false)
+    private String role = "ROLE_USER";
+
+    @ManyToMany
+    @JoinTable(name = "user_favorites", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "media_id"))
+    private Set<MediaItem> favorites = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_watch_later")
+    private Set<MediaItem> watchLater = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_reading_list")
+    private Set<MediaItem> readingList = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_completed")
+    private Set<MediaItem> completed = new HashSet<>();
+
+    public int getLevel() {
+        return (this.points / 100) + 1;
+    }
+
+    public int getXpToNextLevel() {
+        return 100 - (this.points % 100);
+    }
 
     public User() {
     }
