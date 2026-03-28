@@ -43,5 +43,4 @@ public class AnimeController {
                 .defaultIfEmpty(ResponseEntity.notFound().build())
                 .onErrorReturn(ResponseEntity.status(500).build());
     }
-
 }

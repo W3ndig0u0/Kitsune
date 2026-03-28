@@ -1,11 +1,12 @@
 package com.example.kitsuneApi.repository;
 
-import com.example.kitsuneApi.model.AnimeProgress;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.kitsuneApi.model.AnimeProgress;
 
 @Repository
 public interface AnimeRepository extends JpaRepository<AnimeProgress, Long> {
