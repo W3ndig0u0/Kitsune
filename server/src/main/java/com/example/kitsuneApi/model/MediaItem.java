@@ -1,11 +1,7 @@
 package com.example.kitsuneApi.model;
 
-import org.apache.tomcat.util.http.parser.MediaType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,8 +26,7 @@ public class MediaItem {
     private String title;
     private String image;
 
-    @Enumerated(EnumType.STRING)
-    private MediaType type;
+    private String type;
 
     private String provider;
 }

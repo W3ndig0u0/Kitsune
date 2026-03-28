@@ -1,9 +1,13 @@
 package com.example.kitsuneApi.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -53,6 +58,16 @@ public class User {
     @ManyToMany
     @JoinTable(name = "user_completed")
     private Set<MediaItem> completed = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "user_search_history", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "search_query")
+    private List<String> searchHistory = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_view_history", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "media_id"))
+    @OrderColumn(name = "view_order")
+    private List<MediaItem> viewHistory = new ArrayList<>();
 
     public int getLevel() {
         return (this.points / 100) + 1;

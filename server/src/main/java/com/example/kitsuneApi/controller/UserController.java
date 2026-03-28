@@ -1,6 +1,7 @@
 package com.example.kitsuneApi.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -71,10 +72,11 @@ public class UserController {
         }
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserDto> getMyProfile() {
+    @GetMapping("/profile")
+    public ResponseEntity<Map<String, Object>> getMyFullProfile() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.ok(userService.getUserByUsername(username));
+        Map<String, Object> profile = userService.getFullUserProfile(username);
+        return ResponseEntity.ok(profile);
     }
 
     @GetMapping("/all")

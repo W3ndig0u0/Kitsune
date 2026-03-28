@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -23,11 +22,6 @@ public class SecurityConfig {
     public SecurityConfig(JwtRequestFilter jwtRequestFilter, @Value("${frontend.api.url}") String frontendUrl) {
         this.jwtRequestFilter = jwtRequestFilter;
         this.frontendUrl = frontendUrl;
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -57,7 +51,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**")
                         .permitAll()
                         .requestMatchers("/api/user/all").hasRole("ADMIN")
-                        .requestMatchers("/api/user/me", "/api/media/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/user/profile", "/api/media/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated());
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

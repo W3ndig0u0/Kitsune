@@ -1,8 +1,9 @@
 package com.example.kitsuneApi.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -186,6 +187,20 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void addToViewHistory(String username, MediaItem mediaDto) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+        MediaItem media = getOrCreateMedia(mediaDto);
+        user.getViewHistory().remove(media);
+
+        user.getViewHistory().add(0, media);
+
+        if (user.getViewHistory().size() > 10) {
+            user.setViewHistory(new ArrayList<>(user.getViewHistory().subList(0, 10)));
+        }
+
+        userRepository.save(user);
+    }
+
     private MediaItem getOrCreateMedia(MediaItem dto) {
         return mediaRepository.findByConsumetId(dto.getConsumetId())
                 .orElseGet(() -> {
@@ -216,12 +231,31 @@ public class UserService {
         return dto;
     }
 
-    public Map<String, Set<MediaItem>> getUserCollections(String username) {
+    public Map<String, Object> getFullUserProfile(String username) {
         User user = userRepository.findByUsername(username).orElseThrow();
-        return Map.of(
-                "favorites", user.getFavorites(),
-                "watchLater", user.getWatchLater(),
-                "completed", user.getCompleted());
+        UserDto userDto = convertToDto(user);
+        List<UserProgress> recentProgress = userProgressRepository.findByUserId(user.getId());
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", userDto);
+        response.put("favorites", user.getFavorites());
+        response.put("watchLater", user.getWatchLater());
+        response.put("completed", user.getCompleted());
+        response.put("readingList", user.getReadingList());
+        response.put("recentProgress", recentProgress);
+        response.put("searchHistory", user.getSearchHistory());
+        response.put("viewHistory", user.getViewHistory());
+        return response;
+    }
+
+    public void addSearchQuery(String username, String query) {
+        User user = userRepository.findByUsername(username).orElseThrow();
+        user.getSearchHistory().remove(query);
+        user.getSearchHistory().add(0, query);
+        if (user.getSearchHistory().size() > 10) {
+            user.setSearchHistory(user.getSearchHistory().subList(0, 10));
+        }
+
+        userRepository.save(user);
     }
 
 }
