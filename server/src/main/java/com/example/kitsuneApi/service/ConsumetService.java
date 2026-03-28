@@ -11,49 +11,80 @@ public class ConsumetService {
 
     private final WebClient webClient;
 
-    @Value("${consumet.provider.primary}")
-    private String primaryProvider;
+    @Value("${consumet.path.anime}")
+    private String animePath;
 
-    @Value("${consumet.provider.fallback}")
-    private String fallbackProvider;
+    @Value("${consumet.path.manga}")
+    private String mangaPath;
 
-    public ConsumetService(WebClient.Builder builder,
-            @Value("${consumet.api.url}") String baseUrl) {
+    public ConsumetService(WebClient.Builder builder, @Value("${consumet.api.url}") String baseUrl) {
         this.webClient = builder.baseUrl(baseUrl).build();
     }
 
+    // --- ANIME ENDPOINTS ---
+
     public Mono<String> searchAnime(String query) {
         return this.webClient.get()
-                .uri("/anime/{provider}/{query}", primaryProvider, query)
+                .uri(animePath + "/{query}", query)
                 .retrieve()
-                .bodyToMono(String.class)
-                .onErrorResume(e -> {
-                    return this.webClient.get()
-                            .uri("/anime/{provider}/{query}", fallbackProvider, query)
-                            .retrieve()
-                            .bodyToMono(String.class);
-                });
+                .bodyToMono(String.class);
     }
 
     public Mono<String> getAnimeInfo(String id) {
         return this.webClient.get()
-                .uri("/anime/{provider}/info/{id}", primaryProvider, id)
+                .uri(animePath + "/info/{id}", id)
                 .retrieve()
-                .bodyToMono(String.class)
-                .onErrorResume(e -> this.webClient.get()
-                        .uri("/anime/{provider}/info/{id}", fallbackProvider, id)
-                        .retrieve()
-                        .bodyToMono(String.class));
+                .bodyToMono(String.class);
     }
 
     public Mono<String> getWatchLinks(String episodeId) {
         return this.webClient.get()
-                .uri("/anime/{provider}/watch/{episodeId}", primaryProvider, episodeId)
+                .uri(animePath + "/watch/{episodeId}", episodeId)
                 .retrieve()
-                .bodyToMono(String.class)
-                .onErrorResume(e -> this.webClient.get()
-                        .uri("/anime/{provider}/watch/{episodeId}", fallbackProvider, episodeId)
-                        .retrieve()
-                        .bodyToMono(String.class));
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> getTrendingAnime() {
+        return this.webClient.get()
+                .uri(animePath + "/trending")
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> getPopularAnime() {
+        return this.webClient.get()
+                .uri(animePath + "/popular")
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> getRecentEpisodes() {
+        return this.webClient.get()
+                .uri(animePath + "/recent-episodes")
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> getRandomAnime() {
+        return this.webClient.get()
+                .uri(animePath + "/random-anime")
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    public Mono<String> getAiringSchedule() {
+        return this.webClient.get()
+                .uri(animePath + "/airing-schedule")
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    // --- MANGA ENDPOINTS ---
+
+    public Mono<String> searchManga(String query) {
+        return this.webClient.get()
+                .uri(mangaPath + "/{query}", query)
+                .retrieve()
+                .bodyToMono(String.class);
     }
 }

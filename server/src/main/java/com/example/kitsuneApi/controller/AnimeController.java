@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.kitsuneApi.model.MediaItem;
 import com.example.kitsuneApi.service.ConsumetService;
 import com.example.kitsuneApi.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import reactor.core.publisher.Mono;
 
@@ -22,10 +23,12 @@ public class AnimeController {
 
     private final ConsumetService consumetService;
     private final UserService userService;
+    private final ObjectMapper objectMapper;
 
-    public AnimeController(ConsumetService consumetService, UserService userService) {
+    public AnimeController(ConsumetService consumetService, UserService userService, ObjectMapper objectMapper) {
         this.consumetService = consumetService;
         this.userService = userService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("")
@@ -33,7 +36,7 @@ public class AnimeController {
         return "Kitsune Anime API is online";
     }
 
-    @GetMapping("/search")
+    @GetMapping(value = "/search", produces = "application/json")
     public Mono<ResponseEntity<String>> search(@RequestParam String query) {
         String authName = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!authName.equals("anonymousUser")) {
@@ -42,8 +45,35 @@ public class AnimeController {
 
         return consumetService.searchAnime(query)
                 .map(json -> ResponseEntity.ok().body(json))
-                .defaultIfEmpty(ResponseEntity.notFound().build())
-                .onErrorReturn(ResponseEntity.status(500).build());
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "/trending", produces = "application/json")
+    public Mono<ResponseEntity<String>> getTrending() {
+        return consumetService.getTrendingAnime()
+                .map(json -> ResponseEntity.ok().body(json));
+    }
+
+    @GetMapping(value = "/popular", produces = "application/json")
+    public Mono<ResponseEntity<String>> getPopular() {
+        return consumetService.getPopularAnime()
+                .map(json -> ResponseEntity.ok().body(json));
+    }
+
+    @GetMapping(value = "/recent", produces = "application/json")
+    public Mono<ResponseEntity<String>> getRecent() {
+        return consumetService.getRecentEpisodes()
+                .map(json -> ResponseEntity.ok().body(json));
+    }
+
+    @GetMapping(value = "/random", produces = "application/json")
+    public Mono<ResponseEntity<String>> getRandom() {
+        return consumetService.getRandomAnime().map(ResponseEntity::ok);
+    }
+
+    @GetMapping(value = "/schedule", produces = "application/json")
+    public Mono<ResponseEntity<String>> getSchedule() {
+        return consumetService.getAiringSchedule().map(ResponseEntity::ok);
     }
 
     @GetMapping("/info/{id}")
@@ -54,7 +84,7 @@ public class AnimeController {
                 .onErrorReturn(ResponseEntity.status(500).build());
     }
 
-    @PostMapping("/log-view")
+    @PostMapping(value = "/log-view", produces = "application/json")
     public ResponseEntity<Void> logView(@RequestBody MediaItem item) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!username.equals("anonymousUser")) {
