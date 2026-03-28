@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.kitsuneApi.model.UserDto;
+import com.example.kitsuneApi.service.JwtUtil;
 import com.example.kitsuneApi.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("${properties.api.user}")
@@ -23,13 +26,15 @@ import com.example.kitsuneApi.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(@RequestBody UserDto user) {
+    public ResponseEntity<UserDto> registerUser(@Valid @RequestBody UserDto user) {
         return ResponseEntity.ok(userService.registerUser(user));
     }
 
@@ -37,7 +42,8 @@ public class UserController {
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         boolean authenticated = userService.authenticateUser(username, password);
         if (authenticated) {
-            return ResponseEntity.ok("Login successful");
+            String token = jwtUtil.generateToken(username);
+            return ResponseEntity.ok(token);
         }
         return ResponseEntity.status(401).body("Invalid credentials");
     }
@@ -52,7 +58,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 

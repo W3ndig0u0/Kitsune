@@ -2,6 +2,7 @@ package com.example.kitsuneApi.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional; // Viktigt för update/delete
 
@@ -14,9 +15,11 @@ import com.example.kitsuneApi.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserDto registerUser(UserDto dto) {
@@ -30,7 +33,7 @@ public class UserService {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         userRepository.save(user);
         return dto;
@@ -49,7 +52,7 @@ public class UserService {
 
         user.setUsername(updatedDto.getUsername());
         user.setEmail(updatedDto.getEmail());
-        user.setPassword(updatedDto.getPassword());
+        user.setPassword(passwordEncoder.encode(updatedDto.getPassword()));
 
         userRepository.save(user);
         return updatedDto;
@@ -72,7 +75,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public boolean authenticateUser(String username, String password) {
         return userRepository.findByUsername(username)
-                .map(user -> user.getPassword().equals(password))
+                .map(user -> passwordEncoder.matches(password, user.getPassword()))
                 .orElse(false);
     }
 
