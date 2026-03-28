@@ -1,17 +1,24 @@
 package com.example.kitsuneApi.controller;
 
-import com.example.kitsuneApi.service.ConsumetService;
-import lombok.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.kitsuneApi.service.ConsumetService;
+
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("${properties.api.anime}")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("${frontend.api.url}")
 public class AnimeController {
 
     private final ConsumetService consumetService;
+
     public AnimeController(ConsumetService consumetService) {
         this.consumetService = consumetService;
     }

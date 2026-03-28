@@ -1,1 +1,22 @@
-services: {}
+services:
+  kitsune-db:
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: animedb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+  consumet:
+    image: riimuru/consumet-api
+    ports:
+      - "3000:3000"
+
+  kitsune-api:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kitsune-db
+      - consumet

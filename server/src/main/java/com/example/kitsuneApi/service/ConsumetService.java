@@ -3,6 +3,7 @@ package com.example.kitsuneApi.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
 import reactor.core.publisher.Mono;
 
 @Service
@@ -17,7 +18,7 @@ public class ConsumetService {
     private String fallbackProvider;
 
     public ConsumetService(WebClient.Builder builder,
-                           @Value("${consumet.api.url}") String baseUrl) {
+            @Value("${consumet.api.url}") String baseUrl) {
         this.webClient = builder.baseUrl(baseUrl).build();
     }
 

@@ -1,6 +1,10 @@
 package com.example.kitsuneApi.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "anime_progress")
@@ -15,4 +19,3 @@ public class AnimeProgress {
     private Integer lastEpisode;
     private String status;
 }
-

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-KitsuneApiApplication<kitsuneApi>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.kitsuneApi.KitsuneApiApplication",
+            "projectName": "kitsuneApi",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
