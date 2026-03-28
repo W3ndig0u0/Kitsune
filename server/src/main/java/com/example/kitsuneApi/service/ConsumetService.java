@@ -10,6 +10,12 @@ public class ConsumetService {
 
     private final WebClient webClient;
 
+    @Value("${consumet.provider.primary}")
+    private String primaryProvider;
+
+    @Value("${consumet.provider.fallback}")
+    private String fallbackProvider;
+
     public ConsumetService(WebClient.Builder builder,
                            @Value("${consumet.api.url}") String baseUrl) {
         this.webClient = builder.baseUrl(baseUrl).build();
@@ -17,13 +23,12 @@ public class ConsumetService {
 
     public Mono<String> searchAnime(String query) {
         return this.webClient.get()
-                .uri("/anime/animekai/{query}", query)
+                .uri("/anime/{provider}/{query}", primaryProvider, query)
                 .retrieve()
                 .bodyToMono(String.class)
                 .onErrorResume(e -> {
-                    System.out.println("AnimeKai is down, changing to AnimePahe...");
                     return this.webClient.get()
-                            .uri("/anime/animepahe/{query}", query)
+                            .uri("/anime/{provider}/{query}", fallbackProvider, query)
                             .retrieve()
                             .bodyToMono(String.class);
                 });
@@ -31,22 +36,22 @@ public class ConsumetService {
 
     public Mono<String> getAnimeInfo(String id) {
         return this.webClient.get()
-                .uri("/anime/animekai/info/{id}", id)
+                .uri("/anime/{provider}/info/{id}", primaryProvider, id)
                 .retrieve()
                 .bodyToMono(String.class)
                 .onErrorResume(e -> this.webClient.get()
-                        .uri("/anime/animepahe/info/{id}", id)
+                        .uri("/anime/{provider}/info/{id}", fallbackProvider, id)
                         .retrieve()
                         .bodyToMono(String.class));
     }
 
     public Mono<String> getWatchLinks(String episodeId) {
         return this.webClient.get()
-                .uri("/anime/animekai/watch/{episodeId}", episodeId)
+                .uri("/anime/{provider}/watch/{episodeId}", primaryProvider, episodeId)
                 .retrieve()
                 .bodyToMono(String.class)
                 .onErrorResume(e -> this.webClient.get()
-                        .uri("/anime/animepahe/watch/{episodeId}", episodeId)
+                        .uri("/anime/{provider}/watch/{episodeId}", fallbackProvider, episodeId)
                         .retrieve()
                         .bodyToMono(String.class));
     }
