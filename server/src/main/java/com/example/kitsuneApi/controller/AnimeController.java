@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.kitsuneApi.model.MediaItem;
 import com.example.kitsuneApi.service.ConsumetService;
 import com.example.kitsuneApi.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import reactor.core.publisher.Mono;
 
@@ -23,12 +22,10 @@ public class AnimeController {
 
     private final ConsumetService consumetService;
     private final UserService userService;
-    private final ObjectMapper objectMapper;
 
-    public AnimeController(ConsumetService consumetService, UserService userService, ObjectMapper objectMapper) {
+    public AnimeController(ConsumetService consumetService, UserService userService) {
         this.consumetService = consumetService;
         this.userService = userService;
-        this.objectMapper = objectMapper;
     }
 
     @GetMapping("")

@@ -14,14 +14,15 @@ public class ConsumetService {
     @Value("${consumet.path.anime}")
     private String animePath;
 
+    @Value("${consumet.path.anikai}")
+    private String anikaiPath;
+
     @Value("${consumet.path.manga}")
     private String mangaPath;
 
     public ConsumetService(WebClient.Builder builder, @Value("${consumet.api.url}") String baseUrl) {
         this.webClient = builder.baseUrl(baseUrl).build();
     }
-
-    // --- ANIME ENDPOINTS ---
 
     public Mono<String> searchAnime(String query) {
         return this.webClient.get()
@@ -78,8 +79,6 @@ public class ConsumetService {
                 .retrieve()
                 .bodyToMono(String.class);
     }
-
-    // --- MANGA ENDPOINTS ---
 
     public Mono<String> searchManga(String query) {
         return this.webClient.get()

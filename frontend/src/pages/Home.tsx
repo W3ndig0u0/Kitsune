@@ -30,6 +30,7 @@ const Home = () => {
         typeof response.data === "string"
           ? JSON.parse(response.data)
           : response.data;
+      console.log("Söker efter:", response.data);
 
       if (data && data.results) {
         setResults(data.results);
@@ -45,7 +46,6 @@ const Home = () => {
   const handleSearch = async (e?: React.FormEvent) => {
     e?.preventDefault();
     const query = search.trim();
-
     if (query.length < 6) {
       setError("Sökordet måste vara minst 6 tecken 🦊");
       return;
