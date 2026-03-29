@@ -26,7 +26,7 @@
 ```text
 ├── kitsune-frontend/   # React application (UI/UX)
 ├── kitsune-backend/    # Spring Boot application (Logic & Auth)
-└── scraper/            # Scraper logic for video sourcing
+└── docker/ #Docker with the web scraping
 ```
 
 ## ⚙️ Installation & Setup
