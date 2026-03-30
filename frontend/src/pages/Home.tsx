@@ -6,32 +6,54 @@ import Search from './Search';
 
 const Home = () => {
     const [popular, setPopular] = useState<AnimeCardData[]>([]);
+    const [recent, setRecent] = useState<AnimeCardData[]>([]); // Ny state för Recent
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchPopular = async () => {
+        const fetchHomeData = async () => {
             try {
-                const response = await animeService.getPopular();
-                setPopular(response.data);
+                const [popularRes, recentRes] = await Promise.all([
+                    animeService.getPopular(),
+                    animeService.getRecent()
+                ]);
+
+                setPopular(popularRes.data.results || []);
+                setRecent(recentRes.data.results || []);
+                
             } catch (err) {
-                console.error("Kunde inte hämta populär anime 🦊", err);
+                console.error("Could not fetch home data 🦊", err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchPopular();
+
+        fetchHomeData();
     }, []);
 
     return (
         <div className="container">
-          <Search />
+            <Search />
+
+            <section className="home-section">
+                <h2>Senaste Avsnitten 🦊</h2>
+                {loading ? (
+                    <p>Laddar...</p>
+                ) : (
+                    <div className="grid">
+                        {recent.map((anime: AnimeCardData) => (
+                            <AnimeCard key={anime.id} item={anime} />
+                        ))}
+                    </div>
+                )}
+            </section>
+
             <section className="home-section">
                 <h2>Populärt på Kitsune 🦊</h2>
                 {loading ? (
                     <p>Laddar...</p>
                 ) : (
                     <div className="grid">
-                        {popular.map((anime) => (
+                        {popular.map((anime: AnimeCardData) => (
                             <AnimeCard key={anime.id} item={anime} />
                         ))}
                     </div>

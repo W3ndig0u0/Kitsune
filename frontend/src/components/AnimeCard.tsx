@@ -9,6 +9,7 @@ export interface AnimeCardData {
   sub: number;
   dub: number;
   episodes: number;
+  results?: string;
 }
 
 const AnimeCard = ({ item }: { item: AnimeCardData }) => {
