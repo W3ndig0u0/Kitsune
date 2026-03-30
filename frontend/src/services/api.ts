@@ -1,12 +1,11 @@
-import { Axios } from "axios";
+import axios from "axios";
 
-const api = new Axios({
+const api = axios.create({
     baseURL: import.meta.env.SPRING_API_BASE_URL || "http://localhost:8080/api",
     headers: {
         "Content-Type": "application/json",
     },
 });
-
 
 api.interceptors.request.use(
   (config) => {
