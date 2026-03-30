@@ -14,8 +14,8 @@ public class ConsumetService {
     @Value("${consumet.path.anime}")
     private String animePath;
 
-    @Value("${consumet.path.anikai}")
-    private String anikaiPath;
+    @Value("${consumet.path.anilist}")
+    private String anilist;
 
     @Value("${consumet.path.manga}")
     private String mangaPath;
@@ -45,13 +45,6 @@ public class ConsumetService {
                 .bodyToMono(String.class);
     }
 
-    public Mono<String> getTrendingAnime() {
-        return this.webClient.get()
-                .uri(animePath + "/trending")
-                .retrieve()
-                .bodyToMono(String.class);
-    }
-
     public Mono<String> getPopularAnime() {
         return this.webClient.get()
                 .uri(animePath + "/popular")
@@ -62,27 +55,6 @@ public class ConsumetService {
     public Mono<String> getRecentEpisodes() {
         return this.webClient.get()
                 .uri(animePath + "/recent-episodes")
-                .retrieve()
-                .bodyToMono(String.class);
-    }
-
-    public Mono<String> getRandomAnime() {
-        return this.webClient.get()
-                .uri(animePath + "/random-anime")
-                .retrieve()
-                .bodyToMono(String.class);
-    }
-
-    public Mono<String> getAiringSchedule() {
-        return this.webClient.get()
-                .uri(animePath + "/airing-schedule")
-                .retrieve()
-                .bodyToMono(String.class);
-    }
-
-    public Mono<String> searchManga(String query) {
-        return this.webClient.get()
-                .uri(mangaPath + "/{query}", query)
                 .retrieve()
                 .bodyToMono(String.class);
     }

@@ -45,12 +45,6 @@ public class AnimeController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/trending", produces = "application/json")
-    public Mono<ResponseEntity<String>> getTrending() {
-        return consumetService.getTrendingAnime()
-                .map(json -> ResponseEntity.ok().body(json));
-    }
-
     @GetMapping(value = "/popular", produces = "application/json")
     public Mono<ResponseEntity<String>> getPopular() {
         return consumetService.getPopularAnime()
@@ -61,16 +55,6 @@ public class AnimeController {
     public Mono<ResponseEntity<String>> getRecent() {
         return consumetService.getRecentEpisodes()
                 .map(json -> ResponseEntity.ok().body(json));
-    }
-
-    @GetMapping(value = "/random", produces = "application/json")
-    public Mono<ResponseEntity<String>> getRandom() {
-        return consumetService.getRandomAnime().map(ResponseEntity::ok);
-    }
-
-    @GetMapping(value = "/schedule", produces = "application/json")
-    public Mono<ResponseEntity<String>> getSchedule() {
-        return consumetService.getAiringSchedule().map(ResponseEntity::ok);
     }
 
     @GetMapping("/info/{id}")
