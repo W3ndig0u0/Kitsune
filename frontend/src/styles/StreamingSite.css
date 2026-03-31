@@ -1,0 +1,123 @@
+.episode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.episode-card {
+  background: var(--social-bg);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.episode-card:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+}
+
+.ep-title {
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.video-player-wrapper {
+  margin-bottom: 2rem;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.player-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.main-video {
+  width: 100%;
+  height: 100%;
+}
+
+.source-picker {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--social-bg);
+  border-top: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.quality-btn {
+  padding: 6px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.quality-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.episode-card.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: wait;
+}
+
+.video-player-container {
+  width: 100%;
+  background: #000;
+  border-radius: 20px;
+  margin-bottom: 3rem;
+  overflow: hidden;
+  border: 1px solid var(--accent-border);
+  box-shadow: var(--shadow);
+}
+
+.main-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+
+.episode-card {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  text-align: left;
+  transition: 0.2s;
+}
+
+.episode-card.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.close-player {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  font-family: var(--mono);
+  font-weight: bold;
+  cursor: pointer;
+}

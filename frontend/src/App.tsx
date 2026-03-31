@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import AnimeStream from './pages/AnimeStream'
 import Home from './pages/Home'
 import './styles/App.css'
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<Home />} />
         {/* <Route path="/login" element={<Login />} /> */}
         {/* <Route path="/profile" element={<Profile />} /> */}
+        <Route path="/anime/:id" element={<AnimeStream />} />
         
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>

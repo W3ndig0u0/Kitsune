@@ -1,5 +1,5 @@
+import { Link } from 'react-router-dom';
 import '../styles/AnimeCard.css';
-
 export interface AnimeCardData {
   id: string;
   title: string;
@@ -14,6 +14,7 @@ export interface AnimeCardData {
 
 const AnimeCard = ({ item }: { item: AnimeCardData }) => {
   return (
+    <Link to={`/anime/${item.id}`} className="anime-card" key={item.id}>
     <div className="anime-card" key={item.id}>
       <div className="poster-wrapper">
         <img src={item.image} alt={item.title} loading="lazy" />
@@ -44,6 +45,7 @@ const AnimeCard = ({ item }: { item: AnimeCardData }) => {
         {item.japaneseTitle && <p className="jp-title">{item.japaneseTitle}</p>}
       </div>
     </div>
+    </Link>
   );
 };
 

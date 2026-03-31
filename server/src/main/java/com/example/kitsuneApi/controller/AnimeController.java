@@ -57,12 +57,25 @@ public class AnimeController {
                 .map(json -> ResponseEntity.ok().body(json));
     }
 
-    @GetMapping("/info/{id}")
+    @GetMapping(value = "/info/{id}", produces = "application/json")
     public Mono<ResponseEntity<String>> getInfo(@PathVariable String id) {
         return consumetService.getAnimeInfo(id)
                 .map(json -> ResponseEntity.ok().body(json))
-                .defaultIfEmpty(ResponseEntity.notFound().build())
-                .onErrorReturn(ResponseEntity.status(500).build());
+                .defaultIfEmpty(ResponseEntity.status(404)
+                        .body("{\"error\": \"Anime ID not found on AnimeKai provider\"}"))
+                .onErrorReturn(ResponseEntity.status(500)
+                        .body("{\"error\": \"Kitsune Server Error\"}"));
+    }
+
+    @GetMapping(value = "/watch/{episodeId}", produces = "application/json")
+    public Mono<ResponseEntity<String>> getWatchLinks(
+            @PathVariable String episodeId,
+            @RequestParam(required = false) String server,
+            @RequestParam(required = false) Boolean dub) {
+
+        return consumetService.getWatchLinks(episodeId, server, dub)
+                .map(json -> ResponseEntity.ok().body(json))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping(value = "/log-view", produces = "application/json")
